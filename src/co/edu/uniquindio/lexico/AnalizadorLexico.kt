@@ -7,7 +7,7 @@ import kotlin.collections.ArrayList
 /**
  * @author leonardo fabio herrera o.
  * @author john Alexander Martinez
- *
+ * @author Diego Armando jimenez
  * Analizador Lexico, donde se encuentran todos los AFD programados.
  */
 class AnalizadorLexico(var codigoFuente: String) {
