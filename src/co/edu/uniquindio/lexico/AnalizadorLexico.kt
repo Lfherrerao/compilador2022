@@ -137,42 +137,28 @@ class AnalizadorLexico(var codigoFuente: String) {
      * funcion que reprecenta el automata para los numeros enteros.
      */
     fun esEntero(): Boolean {
-        if (caracterActual.isDigit() || caracterActual == '.') {
+        if (caracterActual == 'E') {
 
             var lexema = ""
             var filaInicial = filaActual
             var columnaInicial = columnaActual
             lexema += caracterActual
 
-            if (caracterActual == '.') {
-                return false
-            }
-
-
+            obtenerSiguienteCaracter()
             if (caracterActual.isDigit()) {
-
-                obtenerSiguienteCaracter()
-
 
                 while (caracterActual.isDigit()) {
                     lexema += caracterActual
                     obtenerSiguienteCaracter()
-
-                    if (caracterActual == '.') {
-                        hacerBT(posicionInicial, filaInicial, columnaInicial)
-                        return false
-                    }
-
                 }
-                almacenarToken(lexema, Categoria.ENTERO, filaInicial, columnaInicial)
-                return true
+                almacenarToken(lexema, Categoria.ENTERO,filaInicial,columnaInicial)
+                return  true
 
             }
-
+            // reportar error.
         }
-        return false
+        return false  //retorno inmediato
     }
-
 
     /**
      * funcion que que reprecenta el automata  de los  numeros decimales.
