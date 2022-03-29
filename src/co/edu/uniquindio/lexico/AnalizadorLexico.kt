@@ -39,12 +39,12 @@ class AnalizadorLexico(var codigoFuente: String) {
                 continue
             }
             if (esEntero()) continue
+            if (esDecimal()) continue
            /** if (esComa()) continue
             if (esLlaves()) continue
             if (esCorchete()) continue
             if (esParentesis()) continue
             if (esOperadorRelacional()) continue
-            if (esDecimal()) continue
             if (esIdentificador()) continue
             if (esFinSentencia()) continue
             if (esOperadorLogico()) continue
@@ -163,6 +163,74 @@ class AnalizadorLexico(var codigoFuente: String) {
     /**
      * funcion que que reprecenta el automata  de los  numeros decimales.
      */
+    fun esDecimal(): Boolean{
+
+        if (caracterActual == 'D'){
+            var lexema = ""
+            var filaInicial = filaActual
+            var columnaInicial = columnaActual
+            lexema += caracterActual
+
+            obtenerSiguienteCaracter()
+
+            if (caracterActual== '.' || caracterActual.isDigit()){
+
+                if (caracterActual== '.'){
+
+                    lexema+=caracterActual
+                    obtenerSiguienteCaracter()
+
+                    if (caracterActual.isDigit()){
+                    lexema+= caracterActual
+                        obtenerSiguienteCaracter()
+
+                        while (caracterActual.isDigit()){
+                            lexema+= caracterActual
+                            obtenerSiguienteCaracter()
+                        }
+                        almacenarToken(lexema, Categoria.DECIMAL,filaInicial,columnaInicial)
+                        return true
+
+
+                    }
+                    // reportar error, "despues de D. debe de seguir almenos un digito"
+
+
+                }
+                else{
+                    lexema += caracterActual
+                    obtenerSiguienteCaracter()
+
+                    while (caracterActual.isDigit()){
+                        lexema+= caracterActual
+                        obtenerSiguienteCaracter()
+                    }
+
+                    if (caracterActual== '.') {
+
+                        lexema += caracterActual
+                        obtenerSiguienteCaracter()
+
+                        while (caracterActual.isDigit()){
+                            lexema+= caracterActual
+                            obtenerSiguienteCaracter()
+                        }
+                        almacenarToken(lexema, Categoria.DECIMAL,filaInicial,columnaInicial)
+                        return true
+
+
+
+                    }
+
+                    // reportar error, "despues de D D debe de seguir un punto, si no es un entero y estos comienzan con E"
+
+                    }
+
+            }
+            // retornar error  "Despues de el caracter D, debe de ingresar un dijito o un punto."
+        }
+        return  false // retorno inmediato
+    }
 
     /**
      * funcion que que reprecenta el automata  para las comas.
