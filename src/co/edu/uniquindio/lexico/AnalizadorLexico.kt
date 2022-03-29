@@ -40,12 +40,12 @@ class AnalizadorLexico(var codigoFuente: String) {
             }
             if (esEntero()) continue
             if (esDecimal()) continue
-           /** if (esComa()) continue
+            if (esIdentificador()) continue
+            /** if (esComa()) continue
             if (esLlaves()) continue
             if (esCorchete()) continue
             if (esParentesis()) continue
             if (esOperadorRelacional()) continue
-            if (esIdentificador()) continue
             if (esFinSentencia()) continue
             if (esOperadorLogico()) continue
             if (esPunto()) continue
@@ -57,7 +57,6 @@ class AnalizadorLexico(var codigoFuente: String) {
             if (esCadena()) continue
             if (esComentarioBloque()) continue
             if (esComentarioLinea()) */
-
 
 
             almacenarToken("" + caracterActual, Categoria.DESCONOCIDO, filaActual, columnaActual)
@@ -133,6 +132,7 @@ class AnalizadorLexico(var codigoFuente: String) {
     fun almacenarToken(lexema: String, categoria: Categoria, fila: Int, columna: Int) =
         listaTokens.add(Token(lexema, categoria, fila, columna))
 
+
     /**
      * funcion que reprecenta el automata para los numeros enteros.
      */
@@ -147,12 +147,15 @@ class AnalizadorLexico(var codigoFuente: String) {
             obtenerSiguienteCaracter()
             if (caracterActual.isDigit()) {
 
+                lexema += caracterActual
+                obtenerSiguienteCaracter()
+
                 while (caracterActual.isDigit()) {
                     lexema += caracterActual
                     obtenerSiguienteCaracter()
                 }
-                almacenarToken(lexema, Categoria.ENTERO,filaInicial,columnaInicial)
-                return  true
+                almacenarToken(lexema, Categoria.ENTERO, filaInicial, columnaInicial)
+                return true
 
             }
             // reportar error.
@@ -163,9 +166,9 @@ class AnalizadorLexico(var codigoFuente: String) {
     /**
      * funcion que que reprecenta el automata  de los  numeros decimales.
      */
-    fun esDecimal(): Boolean{
+    fun esDecimal(): Boolean {
 
-        if (caracterActual == 'D'){
+        if (caracterActual == 'D') {
             var lexema = ""
             var filaInicial = filaActual
             var columnaInicial = columnaActual
@@ -173,22 +176,22 @@ class AnalizadorLexico(var codigoFuente: String) {
 
             obtenerSiguienteCaracter()
 
-            if (caracterActual== '.' || caracterActual.isDigit()){
+            if (caracterActual == '.' || caracterActual.isDigit()) {
 
-                if (caracterActual== '.'){
+                if (caracterActual == '.') {
 
-                    lexema+=caracterActual
+                    lexema += caracterActual
                     obtenerSiguienteCaracter()
 
-                    if (caracterActual.isDigit()){
-                    lexema+= caracterActual
+                    if (caracterActual.isDigit()) {
+                        lexema += caracterActual
                         obtenerSiguienteCaracter()
 
-                        while (caracterActual.isDigit()){
-                            lexema+= caracterActual
+                        while (caracterActual.isDigit()) {
+                            lexema += caracterActual
                             obtenerSiguienteCaracter()
                         }
-                        almacenarToken(lexema, Categoria.DECIMAL,filaInicial,columnaInicial)
+                        almacenarToken(lexema, Categoria.DECIMAL, filaInicial, columnaInicial)
                         return true
 
 
@@ -196,71 +199,126 @@ class AnalizadorLexico(var codigoFuente: String) {
                     // reportar error, "despues de D. debe de seguir almenos un digito"
 
 
-                }
-                else{
+                } else {
                     lexema += caracterActual
                     obtenerSiguienteCaracter()
 
-                    while (caracterActual.isDigit()){
-                        lexema+= caracterActual
+                    while (caracterActual.isDigit()) {
+                        lexema += caracterActual
                         obtenerSiguienteCaracter()
                     }
 
-                    if (caracterActual== '.') {
+                    if (caracterActual == '.') {
 
                         lexema += caracterActual
                         obtenerSiguienteCaracter()
 
-                        while (caracterActual.isDigit()){
-                            lexema+= caracterActual
+                        while (caracterActual.isDigit()) {
+                            lexema += caracterActual
                             obtenerSiguienteCaracter()
                         }
-                        almacenarToken(lexema, Categoria.DECIMAL,filaInicial,columnaInicial)
+                        almacenarToken(lexema, Categoria.DECIMAL, filaInicial, columnaInicial)
                         return true
-
 
 
                     }
 
                     // reportar error, "despues de D D debe de seguir un punto, si no es un entero y estos comienzan con E"
 
-                    }
-
+                }
             }
             // retornar error  "Despues de el caracter D, debe de ingresar un dijito o un punto."
         }
-        return  false // retorno inmediato
+        return false // retorno inmediato
     }
 
     /**
-     * funcion que que reprecenta el automata  para las comas.
-     *
-     * @return true si es coma, false en caso contrario
+     *funcion que que reprecenta el automata  que define los identificadores
      */
 
+    fun esIdentificador(): Boolean {
+        if (caracterActual == '&') {
+            var lexema = ""
+            var filaInicial = filaActual
+            var columnaInicial = columnaActual
+            lexema += caracterActual
+            obtenerSiguienteCaracter()
 
-    /**
-     * funcion que que reprecenta el automata  para las llaves tanto izquierda como derecha.
-     */
+            if (caracterActual.isDigit() || caracterActual.isLetter()) {
+                lexema += caracterActual
+                obtenerSiguienteCaracter()
+
+                if (caracterActual.isDigit() || caracterActual.isLetter()) {
+                    lexema += caracterActual
+                    obtenerSiguienteCaracter()
+                    if (caracterActual.isDigit() || caracterActual.isLetter()) {
+                        lexema += caracterActual
+                        obtenerSiguienteCaracter()
+                        if (caracterActual.isDigit() || caracterActual.isLetter()) {
+                            lexema += caracterActual
+                            obtenerSiguienteCaracter()
+                            if (caracterActual.isDigit() || caracterActual.isLetter()) {
+                                lexema += caracterActual
+                                obtenerSiguienteCaracter()
+                                if (caracterActual.isDigit() || caracterActual.isLetter()) {
+                                    lexema += caracterActual
+                                    obtenerSiguienteCaracter()
+                                    if (caracterActual.isDigit() || caracterActual.isLetter()) {
+                                        lexema += caracterActual
+                                        obtenerSiguienteCaracter()
+                                        if (caracterActual.isDigit() || caracterActual.isLetter()) {
+                                            lexema += caracterActual
+                                            obtenerSiguienteCaracter()
+                                            if (caracterActual.isDigit() || caracterActual.isLetter()) {
+                                                lexema += caracterActual
+                                                obtenerSiguienteCaracter()
+                                                if (caracterActual.isDigit() || caracterActual.isLetter()) {
+                                                    print("Error unidentificador solo acepta hasta 10 caractres.")
+                                                    return false
+                                                }
 
 
-    /**
-     * funcion que que reprecenta el automata para los corchetes derecho e izquierdo
-     */
-
-
-    /**
-     *    Metodo que indica si el lexema es un parentesis derecho u izquierdo
-     */
-
+                                                almacenarToken(
+                                                    lexema,
+                                                    Categoria.IDENTIFICADOR,
+                                                    filaInicial,
+                                                    columnaInicial
+                                                )
+                                                return true
+                                            }
+                                            almacenarToken(lexema, Categoria.IDENTIFICADOR, filaInicial, columnaInicial)
+                                            return true
+                                        }
+                                        almacenarToken(lexema, Categoria.IDENTIFICADOR, filaInicial, columnaInicial)
+                                        return true
+                                    }
+                                    almacenarToken(lexema, Categoria.IDENTIFICADOR, filaInicial, columnaInicial)
+                                    return true
+                                }
+                                almacenarToken(lexema, Categoria.IDENTIFICADOR, filaInicial, columnaInicial)
+                                return true
+                            }
+                            almacenarToken(lexema, Categoria.IDENTIFICADOR, filaInicial, columnaInicial)
+                            return true
+                        }
+                        almacenarToken(lexema, Categoria.IDENTIFICADOR, filaInicial, columnaInicial)
+                        return true
+                    }
+                    almacenarToken(lexema, Categoria.IDENTIFICADOR, filaInicial, columnaInicial)
+                    return true
+                }
+                almacenarToken(lexema, Categoria.IDENTIFICADOR, filaInicial, columnaInicial)
+                return true
+            }
+            //reporte de errorr "despues del caracter $, debe de ir porlo menos un numero o una letra para que el identificador sea valido "
+        }
+        return false   // rechazo inmediato
+    }
 
     /**
      *funcion que que reprecenta el automata  que define los operadores relacionales
      */
 
-    /**
-     *funcion que que reprecenta el automata  que define los identificadores
-     */
 
     /**
      * Metodo que indica si el lexema es un fin de sentancia
@@ -278,7 +336,6 @@ class AnalizadorLexico(var codigoFuente: String) {
     /**
      * funcion que que reprecenta el automata  que define los operadores de decremento.
      */
-
 
 
     /*
@@ -312,8 +369,19 @@ class AnalizadorLexico(var codigoFuente: String) {
 	 * Metodo encargado de indicar si lo que se esta analizando es o no un
 	 * comentario de bloque
      */
+    /**
+     * funcion que que reprecenta el automata  para las llaves tanto izquierda como derecha.
+     */
 
 
+    /**
+     * funcion que que reprecenta el automata para los corchetes derecho e izquierdo
+     */
+
+
+    /**
+     *    Metodo que indica si el lexema es un parentesis derecho u izquierdo
+     */
 
 
     /**
