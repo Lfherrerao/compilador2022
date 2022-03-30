@@ -1,5 +1,4 @@
-package co.edu.uniquindio.lexico
-import co.edu.uniquindio.lexico.Categoria
+package co.edu.uniquindio.compilador.lexico
 
 /* *
 * @autor leonardo Fabio Herrera o.

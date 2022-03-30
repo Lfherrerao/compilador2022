@@ -1,7 +1,6 @@
-package co.edu.uniquindio.lexico
+package co.edu.uniquindio.compilador.lexico
 
 
-import java.util.*
 import kotlin.collections.ArrayList
 
 /**

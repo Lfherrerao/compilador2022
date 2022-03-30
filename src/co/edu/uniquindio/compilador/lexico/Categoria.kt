@@ -1,4 +1,4 @@
-package co.edu.uniquindio.lexico
+package co.edu.uniquindio.compilador.lexico
 
 
 /**
