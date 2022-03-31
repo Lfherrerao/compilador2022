@@ -1,6 +1,7 @@
 package co.edu.uniquindio.compilador.lexico
 
 
+import javax.swing.JOptionPane
 import kotlin.collections.ArrayList
 
 /**
@@ -116,16 +117,6 @@ class AnalizadorLexico(var codigoFuente: String) {
     }
 
     /**
-     * Bactraking para cuando una funcion utiliza los caracteres que se usan en otro automata
-     */
-    fun hacerBT(pocicionInicial: Int, filaInicial: Int, columnaInicial: Int) {
-        posicionActual = posicionInicial
-        filaActual = filaInicial
-        columnaActual = columnaInicial
-        caracterActual = codigoFuente[posicionActual]
-    }
-
-    /**
      * funcion encargada de almacenar los tokens encontrados en un array
      */
     fun almacenarToken(lexema: String, categoria: Categoria, fila: Int, columna: Int) =
@@ -157,7 +148,9 @@ class AnalizadorLexico(var codigoFuente: String) {
                 return true
 
             }
-            // reportar error.
+            JOptionPane.showMessageDialog(null,"ERROR: Despues de 'E', " +
+                    "debe de ir por lo menis un numero decimal, \n el lexema leido hasta el momnto " +
+                    "no aparecera en la tabla. y se sigue analizando desde el proximo token !. ")// reportar error.
         }
         return false  //retorno inmediato
     }
@@ -195,7 +188,10 @@ class AnalizadorLexico(var codigoFuente: String) {
 
 
                     }
+                    JOptionPane.showMessageDialog(null,"ERROR: despues de un punto, debe de seguir por lo menos un numero. " +
+                            "\n este token no se mostrara en la tabla y se procede a seguir analizando los siguientes tokens. ")
                     // reportar error, "despues de D. debe de seguir almenos un digito"
+                    return false;
 
 
                 } else {
@@ -221,12 +217,17 @@ class AnalizadorLexico(var codigoFuente: String) {
 
 
                     }
-
+                    JOptionPane.showMessageDialog(null,"ERROR:  debe de seguir un punto, para que el AFD sea decimal. " +
+                            "\n este token no se mostrara en la tabla y se procede a seguir analizando los siguientes tokens. ")
                     // reportar error, "despues de D D debe de seguir un punto, si no es un entero y estos comienzan con E"
+                    return false
 
                 }
             }
+            JOptionPane.showMessageDialog(null,"ERROR: despues de 'D', debe de seguir almenos un digito  o un punto " +
+                    "\n este token no se mostrara en la tabla y se procede a seguir analizando los siguientes tokens. ")
             // retornar error  "Despues de el caracter D, debe de ingresar un dijito o un punto."
+            return false
         }
         return false // retorno inmediato
     }
@@ -234,7 +235,6 @@ class AnalizadorLexico(var codigoFuente: String) {
     /**
      *funcion que que reprecenta el automata  que define los identificadores
      */
-
     fun esIdentificador(): Boolean {
         if (caracterActual == '&') {
             var lexema = ""
@@ -272,6 +272,8 @@ class AnalizadorLexico(var codigoFuente: String) {
                                                 lexema += caracterActual
                                                 obtenerSiguienteCaracter()
                                                 if (caracterActual.isDigit() || caracterActual.isLetter()) {
+                                                    JOptionPane.showMessageDialog(null,"Error un identificador solo acepta hasta 10 caractres \n " +
+                                                            " se procede analizar siguente token despues del decimo caracter del identificador.")
                                                     print("Error unidentificador solo acepta hasta 10 caractres.")
                                                     return false
                                                 }

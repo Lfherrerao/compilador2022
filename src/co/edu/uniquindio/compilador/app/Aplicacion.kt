@@ -9,6 +9,7 @@ import javafx.stage.Stage
 /**
  * @author Leonardo Fabio Herrera o
  * @author John Alexander M
+ *  @author Diego Armando jimenez
  *
  * Clase encargada de generar el ejecutable de la aplicacion
  */
