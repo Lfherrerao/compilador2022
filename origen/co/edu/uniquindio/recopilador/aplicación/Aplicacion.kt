@@ -9,7 +9,7 @@ import javafx.stage.Stage
 /**
  * @author Leonardo Fabio Herrera o
  * @author John Alexander M
- *
+*@autor Diego Armando Gimenez 
  * Clase encargada de generar el ejecutable de la aplicacion
  */
 class Aplicacion : Application() {
