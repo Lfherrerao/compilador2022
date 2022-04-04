@@ -1,24 +1,22 @@
 package co.edu.uniquindio.compilador.app
 
-import co.edu.uniquindio.compilador.lexico.AnalizadorLexico
-//import javafx.application.Application
-//import javafx.fxml.FXMLLoader
-//import javafx.scene.Parent
-//import javafx.scene.Scene
-//import javafx.stage.Stage
+import javafx.application.Application
+import javafx.fxml.FXMLLoader
+import javafx.scene.Parent
+import javafx.scene.Scene
+import javafx.stage.Stage
 
 /**
  * @author Leonardo Fabio Herrera o
  * @author John Alexander M
- *  @author Diego Armando jimenez
  *
  * Clase encargada de generar el ejecutable de la aplicacion
  */
-//class Aplicacion : Application() {
+class Aplicacion : Application() {
 
     /**
      * funcion implementada de la clase application
-
+     */
     override fun start(p0: Stage?) {
 
         val loader = FXMLLoader(Aplicacion::class.java.getResource("/inicio.fxml"))
@@ -41,11 +39,4 @@ import co.edu.uniquindio.compilador.lexico.AnalizadorLexico
 
         }
     }
-    */
-
-    fun main (){
-        val lexico = AnalizadorLexico(codigoFuente = "erov/+nfm++kdjdj")
-        lexico.analizar()
-        print(lexico.listaTokens)
-    }
-//}
+}
