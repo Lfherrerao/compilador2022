@@ -11,6 +11,7 @@ import javafx.stage.Stage
  * @author John Alexander M
  *@author Diego Armando
  * Clase encargada de generar el ejecutable de la aplicacion
+ *
  */
 class Aplicacion : Application() {
 
