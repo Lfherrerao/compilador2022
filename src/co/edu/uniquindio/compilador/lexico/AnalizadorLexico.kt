@@ -57,7 +57,7 @@ class AnalizadorLexico(var codigoFuente: String) {
             if (esOperadorDecremento()) continue
             if (esOperadorIncremento()) continue
             if (esOperadorRelacional()) continue
-            if (esComentarioLinea())
+            if (esComentarioLinea()) continue
 
 
             almacenarToken("" + caracterActual, Categoria.DESCONOCIDO, filaActual, columnaActual)
@@ -128,7 +128,7 @@ class AnalizadorLexico(var codigoFuente: String) {
      * funcion encargada de almacenar los tokens encontrados en un array
      */
     fun almacenarToken(lexema: String, categoria: Categoria, fila: Int, columna: Int) =
-            listaTokens.add(Token(lexema, categoria, fila, columna))
+        listaTokens.add(Token(lexema, categoria, fila, columna))
 
 
     /**
@@ -153,14 +153,13 @@ class AnalizadorLexico(var codigoFuente: String) {
                     obtenerSiguienteCaracter()
                 }
                 almacenarToken(lexema, Categoria.ENTERO, filaInicial, columnaInicial)
-                obtenerSiguienteCaracter()
                 return true
 
             }
             JOptionPane.showMessageDialog(
-                    null, "ERROR: Despues de 'E', " +
-                    "debe de ir por lo menis un numero decimal, \n el lexema leido hasta el momnto " +
-                    "no aparecera en la tabla. y se sigue analizando desde el proximo token !. "
+                null, "ERROR: Despues de 'E', " +
+                        "debe de ir por lo menis un numero decimal, \n el lexema leido hasta el momnto " +
+                        "no aparecera en la tabla. y se sigue analizando desde el proximo token !. "
             )// reportar error.
         }
         return false  //retorno inmediato
@@ -200,8 +199,8 @@ class AnalizadorLexico(var codigoFuente: String) {
 
                     }
                     JOptionPane.showMessageDialog(
-                            null, "ERROR: despues de un punto, debe de seguir por lo menos un numero. " +
-                            "\n este token no se mostrara en la tabla y se procede a seguir analizando los siguientes tokens. "
+                        null, "ERROR: despues de un punto, debe de seguir por lo menos un numero. " +
+                                "\n este token no se mostrara en la tabla y se procede a seguir analizando los siguientes tokens. "
                     )
                     // reportar error, "despues de D. debe de seguir almenos un digito"
                     return false;
@@ -231,8 +230,8 @@ class AnalizadorLexico(var codigoFuente: String) {
 
                     }
                     JOptionPane.showMessageDialog(
-                            null, "ERROR:  debe de seguir un punto, para que el AFD sea decimal. " +
-                            "\n este token no se mostrara en la tabla y se procede a seguir analizando los siguientes tokens. "
+                        null, "ERROR:  debe de seguir un punto, para que el AFD sea decimal. " +
+                                "\n este token no se mostrara en la tabla y se procede a seguir analizando los siguientes tokens. "
                     )
                     // reportar error, "despues de D D debe de seguir un punto, si no es un entero y estos comienzan con E"
                     return false
@@ -240,8 +239,8 @@ class AnalizadorLexico(var codigoFuente: String) {
                 }
             }
             JOptionPane.showMessageDialog(
-                    null, "ERROR: despues de 'D', debe de seguir almenos un digito  o un punto " +
-                    "\n este token no se mostrara en la tabla y se procede a seguir analizando los siguientes tokens. "
+                null, "ERROR: despues de 'D', debe de seguir almenos un digito  o un punto " +
+                        "\n este token no se mostrara en la tabla y se procede a seguir analizando los siguientes tokens. "
             )
             // retornar error  "Despues de el caracter D, debe de ingresar un dijito o un punto."
             return false
@@ -290,9 +289,9 @@ class AnalizadorLexico(var codigoFuente: String) {
                                                 obtenerSiguienteCaracter()
                                                 if (caracterActual.isDigit() || caracterActual.isLetter()) {
                                                     JOptionPane.showMessageDialog(
-                                                            null,
-                                                            "Error un identificador solo acepta hasta 10 caractres \n " +
-                                                                    " se procede analizar siguente token despues del decimo caracter del identificador."
+                                                        null,
+                                                        "Error un identificador solo acepta hasta 10 caractres \n " +
+                                                                " se procede analizar siguente token despues del decimo caracter del identificador."
                                                     )
                                                     print("Error unidentificador solo acepta hasta 10 caractres.")
                                                     return false
@@ -300,10 +299,10 @@ class AnalizadorLexico(var codigoFuente: String) {
 
 
                                                 almacenarToken(
-                                                        lexema,
-                                                        Categoria.IDENTIFICADOR,
-                                                        filaInicial,
-                                                        columnaInicial
+                                                    lexema,
+                                                    Categoria.IDENTIFICADOR,
+                                                    filaInicial,
+                                                    columnaInicial
                                                 )
                                                 return true
                                             }
@@ -427,7 +426,6 @@ class AnalizadorLexico(var codigoFuente: String) {
      */
 
 
-
     /**
      * funcion que que reprecenta el automata  que define los operadores de incremento
      */
@@ -492,7 +490,7 @@ class AnalizadorLexico(var codigoFuente: String) {
             obtenerSiguienteCaracter()
             return true
         }
-        return false
+        return false //RI
     }
 
 
@@ -510,7 +508,7 @@ class AnalizadorLexico(var codigoFuente: String) {
             obtenerSiguienteCaracter()
             return true
         }
-        return false
+        return false  // RI
     }
 
 
@@ -528,7 +526,8 @@ class AnalizadorLexico(var codigoFuente: String) {
                 lexema += caracterActual
                 obtenerSiguienteCaracter()
                 if (caracterActual == '+' || caracterActual == '-' || caracterActual == '*' || caracterActual == '/' ||
-                        caracterActual == '%') {
+                    caracterActual == '%'
+                ) {
                     lexema += caracterActual
                     almacenarToken(lexema, Categoria.OPERADOR_ASIGNACION, filaInicial, columnaInicial)
                     obtenerSiguienteCaracter()
@@ -573,7 +572,8 @@ class AnalizadorLexico(var codigoFuente: String) {
             obtenerSiguienteCaracter()
 
             if (caracterActual == '+' || caracterActual == '-' || caracterActual == '*' || caracterActual == '/' ||
-                    caracterActual == '%') {
+                caracterActual == '%'
+            ) {
                 almacenarToken(lexema, Categoria.OPERADOR_ARITMETICO, filaInicial, columnaInicial)
                 obtenerSiguienteCaracter()
                 return true
@@ -583,56 +583,80 @@ class AnalizadorLexico(var codigoFuente: String) {
 
         }
         return false
-}
+    }
 
     /**
     Metodo que indica si el lexema ingresado es una cadena
      */
 
-    fun esCadena (): Boolean{
-        if (caracterActual == '"'){
-            var lexema  = ""
+    fun esCadena(): Boolean {
+        if (caracterActual == '"') {
+
+            var bandera = true
+            var lexema = ""
             var filaInicial = filaActual
             var columnaInicial = columnaActual
             lexema += caracterActual
             obtenerSiguienteCaracter()
 
-            while (caracterActual != '"'){
-                lexema += caracterActual
-                obtenerSiguienteCaracter()
+            while (!(caracterActual == '"' || caracterActual == finCodigo)) {
+
+                if (caracterActual == '\\') {
+                    lexema += caracterActual
+                    obtenerSiguienteCaracter()
+
+                    if (caracterActual == '\\' || caracterActual == 't' || caracterActual == 'n' || caracterActual == '"') {
+
+                        lexema += caracterActual
+                        obtenerSiguienteCaracter()
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Error en la cadena")
+                        return false // RE}
+                    }
+                    continue
+
+                } else {
+
+                    lexema += caracterActual
+                    obtenerSiguienteCaracter()
+                }
             }
-            if (caracterActual == '"'){
+
+
+            if (caracterActual == '"') {
+
                 lexema += caracterActual
                 obtenerSiguienteCaracter()
                 almacenarToken(lexema, Categoria.CADENA, filaInicial, columnaInicial)
                 return true
             }
+            JOptionPane.showMessageDialog(null, "Error cerrando la cadena")
+            return false
         }
-        return false
-
+        return false  //RI
     }
 
     /**
-	 * Metodo encargado de indicar si lo que se esta analizando es o no es un
-	 * comentario de bloque
+     * Metodo encargado de indicar si lo que se esta analizando es o no es un
+     * comentario de bloque
      */
-    fun esComentarioBloque (): Boolean{
-        if (caracterActual == 'B'){
+    fun esComentarioBloque(): Boolean {
+        if (caracterActual == 'B') {
             var lexema = ""
             var filaInicial = filaActual
             var columaInicial = columnaActual
             lexema += caracterActual
             obtenerSiguienteCaracter()
 
-            if(caracterActual == '#'){
+            if (caracterActual == '#') {
                 lexema += caracterActual
                 obtenerSiguienteCaracter()
 
-                while (caracterActual != '#'){
+                while (caracterActual != '#') {
                     lexema += caracterActual
                     obtenerSiguienteCaracter()
                 }
-                if(caracterActual == '#'){
+                if (caracterActual == '#') {
                     lexema += caracterActual
                     obtenerSiguienteCaracter()
                     if (caracterActual == 'B') {
@@ -641,9 +665,9 @@ class AnalizadorLexico(var codigoFuente: String) {
                     }
                 }
                 JOptionPane.showMessageDialog(
-                        null, "ERROR: Despues de '#', " +
-                        "debe de ir el caracter 'B' para cerrar el comentario \n el lexema leido hasta el momento " +
-                        "no aparecera en la tabla. y se sigue analizando desde el proximo token !. "
+                    null, "ERROR: Despues de '#', " +
+                            "debe de ir el caracter 'B' para cerrar el comentario \n el lexema leido hasta el momento " +
+                            "no aparecera en la tabla. y se sigue analizando desde el proximo token !. "
                 )// reportar error.
             }
             regresar(posicionInicial, filaInicial, columnaInicial)
@@ -656,18 +680,18 @@ class AnalizadorLexico(var codigoFuente: String) {
      * funcion que que reprecenta el automata  para las llaves tanto izquierda como derecha.
      */
     fun esComentarioLinea(): Boolean {
-        if (caracterActual == '#'){
+        if (caracterActual == '#') {
             var lexema = ""
             var filaInicial = filaActual
             var columnaInicial = columnaActual
             lexema += caracterActual
             obtenerSiguienteCaracter()
 
-            while (caracterActual != '\n'){
+            while (caracterActual != '\n') {
                 lexema += caracterActual
                 obtenerSiguienteCaracter()
             }
-            if (caracterActual == '\n'){
+            if (caracterActual == '\n') {
                 almacenarToken(lexema, Categoria.COMENTARIO_DE_BLOQUE, filaInicial, columnaInicial)
                 return true
             }
@@ -675,7 +699,6 @@ class AnalizadorLexico(var codigoFuente: String) {
         }
         return false
     }
-
 
 
     /**
@@ -691,13 +714,13 @@ class AnalizadorLexico(var codigoFuente: String) {
             lexema += caracterActual
 
 
-            if (caracterActual ==  '{' ) {
+            if (caracterActual == '{') {
 
-                almacenarToken(lexema, Categoria . LLAVE_IZQUIERDA , filaInicial, columnaInicial)
+                almacenarToken(lexema, Categoria.LLAVE_IZQUIERDA, filaInicial, columnaInicial)
                 obtenerSiguienteCaracter()
                 return true
             } else {
-                almacenarToken(lexema, Categoria . LLAVE_DERECHA , filaInicial, columnaInicial)
+                almacenarToken(lexema, Categoria.LLAVE_DERECHA, filaInicial, columnaInicial)
                 obtenerSiguienteCaracter()
                 return true
             }
@@ -705,7 +728,6 @@ class AnalizadorLexico(var codigoFuente: String) {
         }
         return false
     }
-
 
 
     /**
@@ -720,13 +742,13 @@ class AnalizadorLexico(var codigoFuente: String) {
             lexema += caracterActual
 
 
-            if (caracterActual ==  '[' ) {
+            if (caracterActual == '[') {
 
-                almacenarToken(lexema, Categoria . CORCHETE_IZQUIERDO , filaInicial, columnaInicial)
+                almacenarToken(lexema, Categoria.CORCHETE_IZQUIERDO, filaInicial, columnaInicial)
                 obtenerSiguienteCaracter()
                 return true
             } else {
-                almacenarToken(lexema, Categoria . CORCHETE_DEREHO , filaInicial, columnaInicial)
+                almacenarToken(lexema, Categoria.CORCHETE_DEREHO, filaInicial, columnaInicial)
                 obtenerSiguienteCaracter()
                 return true
             }
@@ -736,11 +758,10 @@ class AnalizadorLexico(var codigoFuente: String) {
     }
 
 
-
     /**
      *    Metodo que indica si el lexema es un parentesis derecho u izquierdo
      */
-    fun esParentesis():Boolean{
+    fun esParentesis(): Boolean {
         if (caracterActual == '(' || caracterActual == ')') {
 
             var lexema = ""
@@ -749,13 +770,13 @@ class AnalizadorLexico(var codigoFuente: String) {
             lexema += caracterActual
 
 
-            if (caracterActual ==  '(' ) {
+            if (caracterActual == '(') {
 
-                almacenarToken(lexema, Categoria . PARENTESIS_IZQUIERDO , filaInicial, columnaInicial)
+                almacenarToken(lexema, Categoria.PARENTESIS_IZQUIERDO, filaInicial, columnaInicial)
                 obtenerSiguienteCaracter()
                 return true
             } else {
-                almacenarToken(lexema, Categoria . PARENTESIS_DERECHO , filaInicial, columnaInicial)
+                almacenarToken(lexema, Categoria.PARENTESIS_DERECHO, filaInicial, columnaInicial)
                 obtenerSiguienteCaracter()
                 return true
             }
