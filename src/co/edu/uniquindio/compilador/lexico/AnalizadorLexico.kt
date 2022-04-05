@@ -620,7 +620,7 @@ class AnalizadorLexico(var codigoFuente: String) {
         if (caracterActual == 'B'){
             var lexema = ""
             var filaInicial = filaActual
-            var columaInicial = columnaActual
+            var columnaInicial = columnaActual
             lexema += caracterActual
             obtenerSiguienteCaracter()
 
