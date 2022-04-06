@@ -49,7 +49,7 @@ class AnalizadorLexico(var codigoFuente: String) {
             if (esPunto()) continue
             if (esDosPuntos()) continue
             if (esFinSentencia()) continue
-            if (esComa()) continue
+            if (esSeparador()) continue
             if (esOperadorAritmetico()) continue
             if (esCadena()) continue
             if (esComentarioBloque()) continue
@@ -129,7 +129,6 @@ class AnalizadorLexico(var codigoFuente: String) {
      */
     fun almacenarToken(lexema: String, categoria: Categoria, fila: Int, columna: Int) =
         listaTokens.add(Token(lexema, categoria, fila, columna))
-
 
     /**
      * funcion que reprecenta el automata para los numeros enteros.
@@ -338,7 +337,6 @@ class AnalizadorLexico(var codigoFuente: String) {
     /**
      *funcion que que reprecenta el automata  que define los operadores relacionales
      */
-
     fun esOperadorRelacional(): Boolean {
         if (caracterActual == 'R') {
             var lexema = ""
@@ -420,11 +418,9 @@ class AnalizadorLexico(var codigoFuente: String) {
         return false
     }
 
-
     /**
      *funcion que que reprecenta el automata  que define los operadores logicos
      */
-
 
     /**
      * funcion que que reprecenta el automata  que define los operadores de incremento
@@ -449,11 +445,9 @@ class AnalizadorLexico(var codigoFuente: String) {
         return false
     }
 
-
     /**
      * funcion que que reprecenta el automata  que define los operadores de decremento.
      */
-
     fun esOperadorDecremento(): Boolean {
         if (caracterActual == '-') {
             var lexema = ""
@@ -474,11 +468,9 @@ class AnalizadorLexico(var codigoFuente: String) {
         return false
     }
 
-
     /**
      * Metodo que verifica si el lexema es un punto
      */
-
     fun esPunto(): Boolean {
         if (caracterActual == '.') {
             var lexema = ""
@@ -492,7 +484,6 @@ class AnalizadorLexico(var codigoFuente: String) {
         }
         return false //RI
     }
-
 
     /**
      * Metodo que verifica si el lexema es un dos puntos
@@ -510,7 +501,6 @@ class AnalizadorLexico(var codigoFuente: String) {
         }
         return false  // RI
     }
-
 
     /**
      *Metodo que verifica si el caracter a analizar en un operador de asignacion
@@ -542,18 +532,17 @@ class AnalizadorLexico(var codigoFuente: String) {
         return false
     }
 
-
     /**
      *Metodo que verifica si el caracter a analizar en un separador (es coma)
      */
-    fun esComa(): Boolean {
+    fun esSeparador(): Boolean {
         if (caracterActual == ',') {
             var lexema = ""
             var filaInicial = filaActual
             var columnaInicial = columnaActual
             lexema += caracterActual
 
-            almacenarToken(lexema, Categoria.ES_COMA, filaInicial, columnaInicial)
+            almacenarToken(lexema, Categoria.ES_SEPARADOR, filaInicial, columnaInicial)
             obtenerSiguienteCaracter()
             return true
         }
@@ -588,7 +577,6 @@ class AnalizadorLexico(var codigoFuente: String) {
     /**
     Metodo que indica si el lexema ingresado es una cadena
      */
-
     fun esCadena(): Boolean {
         if (caracterActual == '"') {
 
@@ -613,7 +601,7 @@ class AnalizadorLexico(var codigoFuente: String) {
                         JOptionPane.showMessageDialog(null, "Error en la cadena")
                         return false // RE}
                     }
-                    continue
+
 
                 } else {
 
@@ -652,28 +640,50 @@ class AnalizadorLexico(var codigoFuente: String) {
                 lexema += caracterActual
                 obtenerSiguienteCaracter()
 
-                while (caracterActual != '#') {
+                while (!(caracterActual == '#' || caracterActual== finCodigo)) {
                     lexema += caracterActual
                     obtenerSiguienteCaracter()
                 }
-                if (caracterActual == '#') {
+                if (caracterActual == '#' ) {
                     lexema += caracterActual
                     obtenerSiguienteCaracter()
-                    if (caracterActual == 'B') {
+                    if (caracterActual == 'B' ) {
+                        lexema += caracterActual
+                        obtenerSiguienteCaracter()
                         almacenarToken(lexema, Categoria.COMENTARIO_DE_BLOQUE, filaInicial, columnaInicial)
                         return true
                     }
+                    JOptionPane.showMessageDialog(
+                        null, "ERROR: Despues de '#', " +
+                                "debe de ir el caracter 'B' para cerrar el comentario \n el lexema leido hasta el momento " +
+                                "no aparecera en la tabla. y se sigue analizando desde el proximo token !. "
+                    )
+                    return false // RE
+                }
+                else if ( caracterActual== finCodigo){
+                    JOptionPane.showMessageDialog(
+                    null, "ERROR: cerrando el comentario de bloque" +
+                            " \n el lexema leido hasta el momento " +
+                            "no aparecera en la tabla. y se sigue analizando desde el proximo token !. "
+                )// reportar error.
+                    return false
                 }
                 JOptionPane.showMessageDialog(
                     null, "ERROR: Despues de '#', " +
                             "debe de ir el caracter 'B' para cerrar el comentario \n el lexema leido hasta el momento " +
                             "no aparecera en la tabla. y se sigue analizando desde el proximo token !. "
                 )// reportar error.
+                return false
             }
-            regresar(posicionInicial, filaInicial, columnaInicial)
-            return false
+            //regresar(posicionInicial, filaInicial, columnaInicial)
+            JOptionPane.showMessageDialog(
+                null, "ERROR: Despues de 'B', " +
+                        "debe de ir el caracter '#' para abrir el comentario \n el lexema leido hasta el momento " +
+                        "no aparecera en la tabla. y se sigue analizando desde el proximo token !. "
+            )
+            return false // RE
         }
-        return false
+        return false // RI
     }
 
     /**
@@ -687,24 +697,27 @@ class AnalizadorLexico(var codigoFuente: String) {
             lexema += caracterActual
             obtenerSiguienteCaracter()
 
-            while (caracterActual != '\n') {
+            while (!(caracterActual == '\n' || caracterActual== finCodigo)) {
                 lexema += caracterActual
                 obtenerSiguienteCaracter()
             }
             if (caracterActual == '\n') {
-                almacenarToken(lexema, Categoria.COMENTARIO_DE_BLOQUE, filaInicial, columnaInicial)
+                lexema += caracterActual
+                obtenerSiguienteCaracter()
+                almacenarToken(lexema, Categoria.COMENTARIO_DE_LINEA, filaInicial, columnaInicial)
                 return true
             }
-
+            lexema += caracterActual
+            obtenerSiguienteCaracter()
+            almacenarToken(lexema, Categoria.COMENTARIO_DE_LINEA, filaInicial, columnaInicial)
+            return true
         }
-        return false
+        return false // RI
     }
-
 
     /**
      * funcion que que reprecenta el automata  para las llaves tanto izquierda como derecha.
      */
-
     fun esLlaves(): Boolean {
         if (caracterActual == '{' || caracterActual == '}') {
 
@@ -728,7 +741,6 @@ class AnalizadorLexico(var codigoFuente: String) {
         }
         return false
     }
-
 
     /**
      * funcion que que reprecenta el automata para los corchetes derecho e izquierdo
@@ -756,7 +768,6 @@ class AnalizadorLexico(var codigoFuente: String) {
         }
         return false
     }
-
 
     /**
      *    Metodo que indica si el lexema es un parentesis derecho u izquierdo
@@ -786,7 +797,6 @@ class AnalizadorLexico(var codigoFuente: String) {
 
 
     }
-
 
     /**
      * funcion encargada de obtener el siguiente caracter en otras funciones.
