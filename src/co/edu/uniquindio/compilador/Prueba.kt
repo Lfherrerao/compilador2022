@@ -1,10 +1,13 @@
 package co.edu.uniquindio.compilador
 
 import co.edu.uniquindio.compilador.lexico.AnalizadorLexico
+import co.edu.uniquindio.compilador.sintaxis.AnalizadorSintactico
 
 fun main ()  {
 
-    val lexico= AnalizadorLexico("&armario90 6E10")
+
+    var lexico= AnalizadorLexico("_inicio   _fin")
     lexico.analizar()
-    print (lexico.listaTokens)
+    var sintaxis=AnalizadorSintactico(lexico.listaTokens)
+    print(sintaxis.esUnidadDeCompilacion())
 }
