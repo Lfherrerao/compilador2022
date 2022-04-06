@@ -58,6 +58,10 @@ class AnalizadorLexico(var codigoFuente: String) {
             if (esOperadorIncremento()) continue
             if (esOperadorRelacional()) continue
             if (esComentarioLinea()) continue
+            if (esCaracter()) continue
+            if (esOperadorLogico()) continue
+
+
 
 
             almacenarToken("" + caracterActual, Categoria.DESCONOCIDO, filaActual, columnaActual)
@@ -355,8 +359,10 @@ class AnalizadorLexico(var codigoFuente: String) {
                     obtenerSiguienteCaracter()
                     return true
                 }
-                regresar(posicionInicial, filaInicial, columnaInicial)
-                return false
+                lexema += caracterActual
+                almacenarToken(lexema, Categoria.OPERADOR_RELACIONAL, filaInicial, columnaInicial)
+                obtenerSiguienteCaracter()
+                return true
             }
             if (caracterActual == '>') {
                 lexema += caracterActual
@@ -368,8 +374,10 @@ class AnalizadorLexico(var codigoFuente: String) {
                     obtenerSiguienteCaracter()
                     return true
                 }
-                regresar(posicionInicial, filaInicial, columnaInicial)
-                return false
+                lexema += caracterActual
+                almacenarToken(lexema, Categoria.OPERADOR_RELACIONAL, filaInicial, columnaInicial)
+                obtenerSiguienteCaracter()
+                return true
             }
             if (caracterActual == '=') {
                 lexema += caracterActual
@@ -380,8 +388,11 @@ class AnalizadorLexico(var codigoFuente: String) {
                     obtenerSiguienteCaracter()
                     return true
                 }
-                regresar(posicionInicial, filaInicial, columnaInicial)
-                return false
+                JOptionPane.showMessageDialog(
+                    null,
+                    " Error: Despues de el caracter = o !  debe de ingresar un = para que sea un operador relacional "
+                )
+                return false  //RE
             }
             if (caracterActual == '!') {
                 lexema += caracterActual
@@ -392,13 +403,18 @@ class AnalizadorLexico(var codigoFuente: String) {
                     obtenerSiguienteCaracter()
                     return true
                 }
-                regresar(posicionInicial, filaInicial, columnaInicial)
-                return false
+                JOptionPane.showMessageDialog(
+                    null,
+                    " Error: Despues de el caracter = o !  debe de ingresar un = para que sea un operador relacional "
+                )
+                return false  //RE
             }
-            regresar(posicionInicial, filaInicial, columnaInicial)
-            return false
+
+
+            JOptionPane.showMessageDialog(null, " Error: Despues de R debe de ingresar un operador relacional ")
+            return false  //RE
         }
-        return false
+        return false // RI
     }
 
     /**
@@ -415,13 +431,37 @@ class AnalizadorLexico(var codigoFuente: String) {
             obtenerSiguienteCaracter()
             return true
         }
-        return false
+        return false // RI
     }
 
     /**
      *funcion que que reprecenta el automata  que define los operadores logicos
      */
+    fun esOperadorLogico(): Boolean{
 
+        if (caracterActual == 'Y' || caracterActual== 'O' ){
+            var lexema = ""
+            var filaInicial = filaActual
+            var columnaInicial = columnaActual
+            if (caracterActual== 'Y'){
+
+                lexema += caracterActual
+
+                almacenarToken(lexema, Categoria.OPERADOR_LOGICO, filaInicial, columnaInicial)
+                obtenerSiguienteCaracter()
+                return true
+
+            }else {
+                lexema += caracterActual
+
+                almacenarToken(lexema, Categoria.OPERADOR_LOGICO, filaInicial, columnaInicial)
+                obtenerSiguienteCaracter()
+                return true
+            }
+
+        }
+        return false //RI
+    }
     /**
      * funcion que que reprecenta el automata  que define los operadores de incremento
      */
@@ -439,10 +479,10 @@ class AnalizadorLexico(var codigoFuente: String) {
                 obtenerSiguienteCaracter()
                 return true
             }
-            regresar(posicionInicial, filaInicial, columnaInicial)
+
             return false
         }
-        return false
+        return false//RI
     }
 
     /**
@@ -462,7 +502,7 @@ class AnalizadorLexico(var codigoFuente: String) {
                 obtenerSiguienteCaracter()
                 return true
             }
-            regresar(posicionInicial, filaInicial, columnaInicial)
+
             return false
         }
         return false
@@ -511,23 +551,33 @@ class AnalizadorLexico(var codigoFuente: String) {
             var filaInicial = filaActual
             var columnaInicial = columnaActual
             var posicionInicial = posicionActual
+            lexema += caracterActual
+            obtenerSiguienteCaracter()
 
             if (caracterActual == '=') {
                 lexema += caracterActual
                 obtenerSiguienteCaracter()
+
+
+
                 if (caracterActual == '+' || caracterActual == '-' || caracterActual == '*' || caracterActual == '/' ||
                     caracterActual == '%'
                 ) {
                     lexema += caracterActual
-                    almacenarToken(lexema, Categoria.OPERADOR_ASIGNACION, filaInicial, columnaInicial)
                     obtenerSiguienteCaracter()
+                    almacenarToken(lexema, Categoria.OPERADOR_ASIGNACION, filaInicial, columnaInicial)
                     return true
                 }
-                regresar(posicionInicial, filaInicial, columnaInicial)
-                return false
+
+
+                almacenarToken(lexema, Categoria.OPERADOR_ASIGNACION, filaInicial, columnaInicial)
+                return true
+
             }
-            regresar(posicionInicial, filaInicial, columnaInicial)
-            return false
+
+            JOptionPane.showMessageDialog(null, "Error: despues de una 'S', debe de ir un caracter de asignacion")
+            return false//REe
+
         }
         return false
     }
@@ -563,15 +613,82 @@ class AnalizadorLexico(var codigoFuente: String) {
             if (caracterActual == '+' || caracterActual == '-' || caracterActual == '*' || caracterActual == '/' ||
                 caracterActual == '%'
             ) {
-                almacenarToken(lexema, Categoria.OPERADOR_ARITMETICO, filaInicial, columnaInicial)
+                lexema += caracterActual
                 obtenerSiguienteCaracter()
+                almacenarToken(lexema, Categoria.OPERADOR_ARITMETICO, filaInicial, columnaInicial)
                 return true
             }
-            regresar(posicionInicial, filaInicial, columnaInicial)
+            JOptionPane.showMessageDialog(
+                null,
+                "Error: En los operadores aritmeticos, despues de una 'A'  debe de ir un ssigno aritmetico!"
+            )
+            return false // RE
+
+        }
+        return false // RI
+    }
+
+    /**
+    Metodo que indica si el lexema ingresado es una cadena
+     */
+    fun esCaracter(): Boolean {
+        if (caracterActual == '\'') {
+
+            var bandera = true
+            var lexema = ""
+            var filaInicial = filaActual
+            var columnaInicial = columnaActual
+            lexema += caracterActual
+            obtenerSiguienteCaracter()
+
+            if (caracterActual == '\\') {
+                lexema += caracterActual
+                obtenerSiguienteCaracter()
+
+                if (caracterActual == '\\' || caracterActual == 't' || caracterActual == 'n' || caracterActual == '\'') {
+                    lexema += caracterActual
+                    obtenerSiguienteCaracter()
+
+                    if (caracterActual == '\''){
+                        lexema += caracterActual
+                        obtenerSiguienteCaracter()
+                        almacenarToken(lexema, Categoria.CARACTER, filaInicial, columnaInicial)
+                        return true
+                    }
+                    return false //RE
+                    JOptionPane.showMessageDialog(null, "Error cerrando el caracter")
+
+                }
+                JOptionPane.showMessageDialog(null, "Error en caracter")
+                    return false // RE}
+
+                //RE
+            }
+            else {
+                if(caracterActual== '\''){
+
+                    lexema += caracterActual
+                    obtenerSiguienteCaracter()
+                    almacenarToken(lexema, Categoria.CARACTER, filaInicial, columnaInicial)
+                    return true
+                }
+                else {
+                    lexema += caracterActual
+                    obtenerSiguienteCaracter()
+                    if (caracterActual== '\''){
+                        lexema += caracterActual
+                        obtenerSiguienteCaracter()
+                        almacenarToken(lexema, Categoria.CARACTER, filaInicial, columnaInicial)
+                        return true
+                    }
+                    return false
+                }
+            }
+            JOptionPane.showMessageDialog(null, "Error")
             return false
 
         }
-        return false
+        return false  //RI
     }
 
     /**
@@ -640,14 +757,14 @@ class AnalizadorLexico(var codigoFuente: String) {
                 lexema += caracterActual
                 obtenerSiguienteCaracter()
 
-                while (!(caracterActual == '#' || caracterActual== finCodigo)) {
+                while (!(caracterActual == '#' || caracterActual == finCodigo)) {
                     lexema += caracterActual
                     obtenerSiguienteCaracter()
                 }
-                if (caracterActual == '#' ) {
+                if (caracterActual == '#') {
                     lexema += caracterActual
                     obtenerSiguienteCaracter()
-                    if (caracterActual == 'B' ) {
+                    if (caracterActual == 'B') {
                         lexema += caracterActual
                         obtenerSiguienteCaracter()
                         almacenarToken(lexema, Categoria.COMENTARIO_DE_BLOQUE, filaInicial, columnaInicial)
@@ -659,13 +776,12 @@ class AnalizadorLexico(var codigoFuente: String) {
                                 "no aparecera en la tabla. y se sigue analizando desde el proximo token !. "
                     )
                     return false // RE
-                }
-                else if ( caracterActual== finCodigo){
+                } else if (caracterActual == finCodigo) {
                     JOptionPane.showMessageDialog(
-                    null, "ERROR: cerrando el comentario de bloque" +
-                            " \n el lexema leido hasta el momento " +
-                            "no aparecera en la tabla. y se sigue analizando desde el proximo token !. "
-                )// reportar error.
+                        null, "ERROR: cerrando el comentario de bloque" +
+                                " \n el lexema leido hasta el momento " +
+                                "no aparecera en la tabla. y se sigue analizando desde el proximo token !. "
+                    )// reportar error.
                     return false
                 }
                 JOptionPane.showMessageDialog(
@@ -697,7 +813,7 @@ class AnalizadorLexico(var codigoFuente: String) {
             lexema += caracterActual
             obtenerSiguienteCaracter()
 
-            while (!(caracterActual == '\n' || caracterActual== finCodigo)) {
+            while (!(caracterActual == '\n' || caracterActual == finCodigo)) {
                 lexema += caracterActual
                 obtenerSiguienteCaracter()
             }
