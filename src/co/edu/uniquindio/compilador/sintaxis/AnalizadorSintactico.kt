@@ -2,6 +2,7 @@ package co.edu.uniquindio.compilador.sintaxis
 
 import co.edu.uniquindio.compilador.lexico.Categoria
 import co.edu.uniquindio.compilador.lexico.Token
+import co.edu.uniquindio.compilador.lexico.Error
 
 
 class AnalizadorSintactico(var listaTokens: ArrayList<Token>) {
@@ -25,11 +26,11 @@ class AnalizadorSintactico(var listaTokens: ArrayList<Token>) {
      * funcion encargada de guardar los errores ocurridos en el analizador sintactico
      */
     fun reportarError(mensaje: String) {
-        //listaDeErrores.add(Error(mensaje, tokenActual.fila, tokenActual.columna))
+        listaDeErrores.add(Error(mensaje, tokenActual.fila, tokenActual.columna))
     }
 
     /**
-     * <unidadDeCompilacion>:: _inicio <ListaElemento>  _fin
+     * <unidadDeCompilacion>:: _inicio [<ListaElemento>]  _fin
      */
     fun esUnidadDeCompilacion(): UnidadDeCompilacion? {
 
@@ -38,18 +39,12 @@ class AnalizadorSintactico(var listaTokens: ArrayList<Token>) {
 
             var listaElementos: ArrayList<Elemento> = esListaElemento()
 
-            if (listaElementos.size > 0) {
-                //obtenerSiguienteToken()
+
                 if (tokenActual.categoria == Categoria.PALABRA_RESERVADA && tokenActual.lexema == "_fin") {
                     obtenerSiguienteToken()
                     return UnidadDeCompilacion(listaElementos)
                 }
-            } else {
-                reportarError("debe de ingresar elementos")
-                print ("debe de ingresar elementos")
-                return null
 
-            }
         }
         return  null
     }
