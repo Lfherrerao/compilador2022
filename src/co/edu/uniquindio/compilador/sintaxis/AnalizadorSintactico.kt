@@ -3,6 +3,7 @@ package co.edu.uniquindio.compilador.sintaxis
 import co.edu.uniquindio.compilador.lexico.Categoria
 import co.edu.uniquindio.compilador.lexico.Token
 import co.edu.uniquindio.compilador.lexico.Error
+import java.lang.annotation.RetentionPolicy
 
 
 class AnalizadorSintactico(var listaTokens: ArrayList<Token>) {
@@ -94,10 +95,44 @@ class AnalizadorSintactico(var listaTokens: ArrayList<Token>) {
     }
 
     /**
-     * <Funcion> :: _fun identificador ":" [<TipoDato>] "("  <ListaParametros> ")" "{" <ListaSentencias> "}"
+     * <Funcion> :: _fun identificador ":" [<TipoDato>] "("  [<ListaParametros>] ")" "{" [<ListaSentencias>] "}"
      */
     fun esFuncion(): Funcion? {
-        return null
+        if (tokenActual.categoria==  Categoria.PALABRA_RESERVADA && tokenActual.lexema=="_fun"){
+            obtenerSiguienteToken()
+            if (tokenActual.categoria==  Categoria.IDENTIFICADOR){
+                var nombreFuncion= tokenActual
+                obtenerSiguienteToken()
+                if (tokenActual.categoria==  Categoria.DOS_PUNTOS){
+                    obtenerSiguienteToken()
+                    var tipoDato= esTipoDato()
+                    if (tokenActual.categoria==  Categoria.PARENTESIS_IZQUIERDO){
+                        obtenerSiguienteToken()
+                        var listaParametro= esLIstaParametro()
+                        if (tokenActual.categoria==  Categoria.PARENTESIS_DERECHO){
+                            obtenerSiguienteToken()
+                            if (tokenActual.categoria==  Categoria.LLAVE_IZQUIERDA){
+                                obtenerSiguienteToken()
+                                var listaSentencias= esListaSentencias()
+                                if (tokenActual.categoria==  Categoria.LLAVE_DERECHA){
+                                    obtenerSiguienteToken()
+
+                                    return Funcion(nombreFuncion,tipoDato,listaParametro, listaSentencias)
+
+                                }
+                                reportarError("falta cerrar la funcion con llave derecha")
+                            }
+                            reportarError("falta parentesis izquierdo en la funcion")
+                        }
+                        reportarError("falta parentesis derecho en la funcion")
+                    }
+                    reportarError("Falta el parentesis izquierdo en la funcion")
+                }
+                reportarError("ERROR SINTACTICO:Faltan los :")
+            }
+            reportarError("ERROR SISNTACTICO: la funcion esta al nombrada")
+        }
+        return null //RI
 
     }
 
@@ -107,4 +142,17 @@ class AnalizadorSintactico(var listaTokens: ArrayList<Token>) {
     fun esDeclaracioVariable(): DeclaracionVariable?{
         return null
     }
+
+    fun esTipoDato (): Token? {
+        return null
+    }
+
+    fun esListaSentencias(): ArrayList<Sentencia>?{
+        return ArrayList()
+    }
+
+    fun esLIstaParametro():ArrayList<Parametro>?{
+        return ArrayList()
+    }
+
 }
