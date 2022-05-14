@@ -1,0 +1,67 @@
+<unidadDeCompilacion>:: _inicio <ListaElemento>  _fin
+
+<ListaElementos>:: <Elementos>[<ListaElementos>] 
+ 
+<Elemento>:: <Funcion> | <DeclaracionVariable>
+
+<listaFunciones>:: <Funcion> [<ListaFunciones>]
+
+<Funcion> :: _fun identificador ":" [<TipoDato>] "(" [<ListaParametros>] ")" "{" [<ListaSentencias>] "}"
+
+<ListaParametros>:: <Parametro> ["," <ListaParametros>]
+
+<Parametro>:: <TipoDato> identificador
+
+<TipoDato>:: _logico | _cadena  | _numero_int  | _numero_dec
+
+<ListaSentencias>:: <Sentencia>[<ListaSentencias>]
+
+<Sentencias>:: <Ciclo> | <DeclaracionVariable> | <Asignacion> | <Impresion> | <Lectura> | <InvocacionFuncion> 
+| <Decision> | <Convertir> | <DeclaracionArreglo> | <Retorno>
+
+<Ciclo>:: _mientras "(" <ExpresionLogica> ")" "{" [<ListaSentencias>] "}"
+
+<DeclaracionVariable>:: <variable> | <Constante>
+
+<Variable>:: _var <TipoDato> identificador [operadorAsignacion <Expresion>]
+
+<Constante>:: _con <TipoDato> identificador "=" <Expresion>
+
+<Asignacion>:: identificador operadorAsignacion <Expresion>
+
+<Impresion>:: _imprime ":" <Expresion>
+
+<Lectura>:: _lea ":" identificador
+
+<InvocacionFuncion> _llamar identificador "(" [<ListaParameros>] ")"
+
+<Decision> :: _si "(" <ExpresionLogica> ")" "{" [<ListaSentencias>] ")" "}" [_demas "{" [<ListaSentencias>] "}"]
+
+<Expresion>::<ExpresionAritmetica> | <ExpresionLogica> | <ExpresionRelacional> | <ExpresionCadena>
+
+<ExpresionAritmetica>:: <ExpresionAritmetica> OperadorAritmetico <ExpresionAritmetica> |
+			"(" <ExpresionAritmetica> ")" | <ValorNumerico>
+
+<ValorNumerico>:: [<Signo>] Real | [<Signo>] entero | [<Signo>] identificador
+
+<ExpresionRelacional>:: <ExpresionAritmetica> operadorRelacional <ExpresionAritmetica> | _true | _false
+
+<ExpresionLogica>:: <ExpresionLogica> operadorLogico <ExpresionLogica> | "(" <ExpresionLogica> ")"
+			| <ExpresionRelacional>
+
+<ExpresionCadena>::   cadena[ '.' <ExpresionCadena>] | identificador		
+
+<Conversio>:: _convertir identificador "(" <TipoDto> ")" 
+
+<DeclaraArreglo>::= _arr <TioDato> "[]" identificador
+
+<InicializaArreglo>::= _inArr   identificador operadorAsignacion  <TipoDato>  "[" <ValorNumerico> "]"
+
+<Retorno>:: _retorne expresion
+
+<IncrementoDecremento>::= ++ | --
+
+
+
+
+

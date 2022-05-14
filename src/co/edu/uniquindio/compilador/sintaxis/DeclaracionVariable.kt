@@ -1,4 +1,14 @@
 package co.edu.uniquindio.compilador.sintaxis
 
-class DeclaracionVariable(var declaracionVariable: DeclaracionVariable): Elemento() {
+import javafx.scene.control.TreeItem
+
+open class DeclaracionVariable(): Elemento() {
+    override fun toString(): String {
+        return "DeclaracionVariable()"
+    }
+
+   open  override fun getArbolVisual(): TreeItem<String>? {
+        return null
+
+    }
 }
